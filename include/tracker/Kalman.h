@@ -8,7 +8,7 @@
 
 
 ///
-/// \brief The TKalmanFilter class
+/// @brief The TKalmanFilter class
 /// http://www.morethantechnical.com/2011/06/17/simple-kalman-filter-for-tracking-using-opencv-2-2-w-code/
 ///
 class TKalmanFilter
