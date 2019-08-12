@@ -9,7 +9,6 @@
 
 /*
   To do:
-  
   LCA functions
   Preorder
   Inorder
@@ -18,10 +17,9 @@
   Height
   Depth
   etc.
-  
 */
 
-#include "mygraph.h"
+#include "graph/mygraph.h"
 
 
 // Test whether graph is a tree
@@ -34,7 +32,7 @@ public:
 
 	node parent( const node v ) const;
 	node root() const;
-	
+
 	bool is_root( const node v ) const;
 	bool is_leaf( const node v ) const;
 
@@ -42,9 +40,9 @@ public:
 	node get_right_child(const node v) const;
 
 	void postorder_traversal();
-	
+
 	int postorder (const node v) const { return order[v]; };
-	
+
 protected:
 	node_map<int> order;
 	std::map <int, node, std::less <int> > number;
@@ -53,4 +51,3 @@ protected:
 
 
 #endif
-

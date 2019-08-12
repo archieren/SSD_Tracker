@@ -1,6 +1,5 @@
 #include "tracker/track.h"
 
-
 CTrack::CTrack(
         const CRegion& region,
         tracking::KalmanType kalmanType,
