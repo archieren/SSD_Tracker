@@ -41,8 +41,8 @@ class Detector {
 
  private:
   static Detector * ssd_Detector;
-  static std::unique_ptr<tensorflow::session> sess;
-  static std::map<int,std::string> labelsMap = std::map<int,std::string>();
+  static std::unique_ptr<tensorflow::Session> sess;
+  static std::map<int,std::string> labelsMap ;
 };
 
 #endif //PROJECT_SSD_DETECT_H
