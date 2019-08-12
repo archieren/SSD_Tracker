@@ -13,6 +13,18 @@
 #include <utility>
 #include <vector>
 
+#include "tensorflow/cc/ops/const_op.h"
+#include "tensorflow/cc/ops/standard_ops.h"
+#include "tensorflow/core/framework/graph.pb.h"
+#include "tensorflow/core/graph/default_device.h"
+#include "tensorflow/core/graph/graph_def_builder.h"
+#include "tensorflow/core/lib/core/threadpool.h"
+#include "tensorflow/core/lib/io/path.h"
+#include "tensorflow/core/lib/strings/stringprintf.h"
+#include "tensorflow/core/platform/init_main.h"
+#include "tensorflow/core/public/session.h"
+
+
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -28,10 +40,9 @@ class Detector {
 
 
  private:
-    // shared_ptr<Net<float> > net_;
-    cv::Size input_geometry_;
-    int num_channels_;
-    cv::Mat mean_;
+  static Detector * ssd_Detector;
+  static std::unique_ptr<tensorflow::session> sess;
+  static std::map<int,std::string> labelsMap = std::map<int,std::string>();
 };
 
 #endif //PROJECT_SSD_DETECT_H
