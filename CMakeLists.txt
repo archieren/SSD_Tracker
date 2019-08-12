@@ -11,7 +11,14 @@ project(SSD)
 # ----------------------------------------------------------------------------
 # OpenCV >= 3.4
 FIND_PACKAGE(OpenCV REQUIRED)
-find_package(TensorFlow REQUIRED)
+# TensorFlow
+find_package(PkgConfig)
+pkg_check_modules(TensorFlow REQUIRED tensorflow)
+
+link_directories(${TensorFlow_LIBRARY_DIRS})
+include_directories(${TensorFlow_INCLUDE_DIRS})
+add_compile_definitions(${TensorFlow_CFLAGS_OTHER})
+
 # ----------------------------------------------------------------------------
 # Add Libraries and peoject files
 # ----------------------------------------------------------------------------
@@ -157,4 +164,4 @@ SOURCE_GROUP("GTL" FILES ${gtl_source} ${gtl_header})
 # ----------------------------------------------------------------------------
 # Link libraries to project
 # ----------------------------------------------------------------------------
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${OpenCV_LIBS} ${TensorFlow_LIBS})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${OpenCV_LIBS} ${TensorFlow_LIBRARIES})
