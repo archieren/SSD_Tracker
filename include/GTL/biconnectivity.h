@@ -6,6 +6,7 @@
 
 #include <list>
 #include <stack>
+#include <iostream>
 
 __GTL_BEGIN_NAMESPACE
 

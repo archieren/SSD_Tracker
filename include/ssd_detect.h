@@ -18,38 +18,16 @@
 #include <opencv2/imgproc/imgproc.hpp>
 
 // This is a demo code for using a SSD model to do detection.
-// The code is modified from examples/cpp_classification/classification.cpp.
-// Usage:
-//    ssd_detect [FLAGS] model_file weights_file list_file
-//
-// where model_file is the .prototxt file defining the network architecture, and
-// weights_file is the .caffemodel file containing the network parameters, and
-// list_file contains a list of image files with the format as follows:
-//    folder/img1.JPEG
-//    folder/img2.JPEG
-// list_file can also contain a list of video files with the format as follows:
-//    folder/video1.mp4
-//    folder/video2.mp4
-//
 
 class Detector {
-public:
+ public:
     void initDetection(const std::string& model_file,
-             const std::string& weights_file,
-             const std::string& mean_file,
-             const std::string& mean_value);
+             const std::string& label_file);
 
     std::vector<std::vector<float> > Detect(const cv::Mat& img);
 
-private:
-    void SetMean(const std::string& mean_file, const std::string& mean_value);
 
-    void WrapInputLayer(std::vector<cv::Mat>* input_channels);
-
-    void Preprocess(const cv::Mat& img,
-                    std::vector<cv::Mat>* input_channels);
-
-private:
+ private:
     // shared_ptr<Net<float> > net_;
     cv::Size input_geometry_;
     int num_channels_;

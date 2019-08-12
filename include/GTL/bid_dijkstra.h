@@ -7,6 +7,8 @@
 #include <GTL/edge_map.h>
 #include <GTL/algorithm.h>
 
+#include <iostream>
+
 __GTL_BEGIN_NAMESPACE
 
 /**

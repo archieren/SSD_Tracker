@@ -8,7 +8,7 @@
 #include <string>
 
 
-#include "gdefs.h"
+#include "graph/gdefs.h"
 
 
 enum GPortDevice {devScreen, devPrinter, devPicture, devPostscript};
@@ -42,7 +42,7 @@ public:
     virtual void SetPoint (const int x, const int y) { X = x; Y = y; };
     virtual void SetX (int x) { X = x; };
     virtual void SetY (int y) { Y = y; };
-    
+
     int	operator== (const GPoint &p) { return (int) ( (X == p.X) && ( Y == p.Y)); };
     int	operator!= (const GPoint &p) { return (int) ( (X != p.X) || ( Y != p.Y)); };
 protected:
@@ -94,7 +94,7 @@ public:
     virtual std::string GetDescription () { return description; };
     virtual int  GetSize () { return size; };
     virtual bool IsBold () { return bold; };
-    virtual bool IsItalic () { return italic; };    
+    virtual bool IsItalic () { return italic; };
 private:
     std::string 	description;
     std::string 	name;
@@ -109,29 +109,6 @@ typedef GFont *GFontPtr;
 
 
 
-// Windows needs the two handles for screen and printer fonts
-// Mac just sets things
-// Postscript writes to the postscript stream
-
-
-// Virtual class to encapsulate printing
-class GBasePrinter
-{
-public:
-    GBasePrinter () {};
-    virtual ~GBasePrinter () {};
-    virtual void PrinterSetup () = 0;
-    virtual void AbortPrinting () = 0;
-    virtual void EndDoc ();
-    virtual bool EndPage ();
-    virtual void GetPrintingRect (GRect &r) = 0;
-    virtual void GetPhysicalPageRect (GRect &r) = 0;
-    virtual bool StartPage () = 0;
-    virtual bool StartDoc (char *jobname) = 0; // "GBasePrinter"
-};
-
-// Windows  port VPort
-// Mac port VPort
 // Postscript - just write to file
 
 
@@ -151,34 +128,34 @@ public:
         { DrawLine (pt1.GetX(), pt1.GetY(), pt2.GetX(), pt2.GetY()); };
     virtual void DrawRect (const GRect &r) = 0;
     virtual void DrawText (const int x, const int y, const char *s) = 0;
-    
+
 	// Display
     virtual GPortDevice GetCurrentDevice () { return Device; };
     virtual void GetDisplayRect (GRect &r) { r = DisplayRect; };
     virtual void SetDisplayRect (GRect &r) { DisplayRect = r; };
-    
+
     // Pen
     virtual int  GetPenWidth () { return PenWidth; };
     virtual void SetPenWidth (int w) { PenWidth = w; };
-    
+
     // Fonts
     virtual void SetCurrentFont (GBaseFont &font) = 0;
-    
+
     // Pictures
     virtual void StartPicture (char *pictFileName) = 0;
     virtual void EndPicture () = 0;
-    
+
     // Groups
     virtual void BeginGroup () = 0;
     virtual void EndGroup () = 0;
-    
+
     // Printing
     virtual void GetPrintingRect (GRect &r) = 0;
-	
+
 	// Colour
 	virtual void SetFillColorRGB (int /*r*/, int /*g*/, int /*b*/) {};
-	
-    
+
+
 protected:
     // list of fonts
     // printer class
@@ -204,70 +181,37 @@ public:
     virtual void FillCircle (const GPoint &pt, const int radius);
 
 
-    
+
     // Pen
     virtual void SetPenWidth (int w);
-    
-    
+
+
     // Fonts
     virtual void SetCurrentFont (GBaseFont &font);
-    
+
     // Pictures
     virtual void StartPicture (char *pictFileName);
     virtual void EndPicture ();
-    
+
     // Groups
     virtual void BeginGroup () {};
     virtual void EndGroup () {};
-    
+
     // Printing
     virtual void GetPrintingRect (GRect &r);
-	
-	virtual void SetFillColorRGB (int r, int g, int b) 
-	{ 
-		fill_r = (double)r/255.0; 
-		fill_g = (double)g/255.0; 
-		fill_b = (double)b/255.0; 
+
+	virtual void SetFillColorRGB (int r, int g, int b)
+	{
+		fill_r = (double)r/255.0;
+		fill_g = (double)g/255.0;
+		fill_b = (double)b/255.0;
 	};
 
 protected:
     std::ofstream 		PostscriptStream;
     std::string 	DocumentFonts;
-	
+
 	double fill_r, fill_g, fill_b;
-};
-
-class SVGPort : public GBasePort
-{
-public:
-    SVGPort ();
-    virtual void DrawArc (const GPoint &/*pt*/, const int /*radius*/,
-        const double /*startAngleDegrees*/, const double /*endAngleDegrees*/) {};
-    virtual void DrawCircle (const GPoint &pt, const int radius);
-    virtual void DrawLine (const int x1, const int y1, const int x2, const int y2);
-    virtual void DrawRect (const GRect &r);
-    virtual void DrawText (const int x, const int y, const char *text);
-
-    // Pen
-    virtual void SetPenWidth (int /*w*/) {};
-
-
-    // Fonts
-    virtual void SetCurrentFont (GBaseFont &font);
-
-    // Pictures
-    virtual void StartPicture (char *pictFileName);
-    virtual void EndPicture ();
-
-    // Groups
-    virtual void BeginGroup () {};
-    virtual void EndGroup () {};
-
-    // Printing
-    virtual void GetPrintingRect (GRect &r);
-protected:
-    std::ofstream 		svgStream;
-    std::string 	fontString;
 };
 
 extern GBasePort *Port;

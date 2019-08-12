@@ -1,6 +1,8 @@
 #ifndef GTL_BELLMAN_FORD_H
 #define GTL_BELLMAN_FORD_H
 
+#include <iostream>
+
 #include <GTL/GTL.h>
 #include <GTL/algorithm.h>
 #include <GTL/node_map.h>

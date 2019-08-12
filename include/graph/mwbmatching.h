@@ -10,16 +10,16 @@ class GTL_EXTERN mwbmatching : public algorithm
 public:
 	mwbmatching ();
 	virtual ~mwbmatching();
-	
+
     /**
      * Sets weight of every edge for maximum weight bipartite matching calculation.
      *
      * @param <code>edge_weight</code> weight of every edge.
      */
 	void set_vars(const edge_map<int>& edge_weight);
-	
+
     /**
-     * Finds a maximum weight bipartite matching of G. 
+     * Finds a maximum weight bipartite matching of G.
      *
      * @param <code>G</code> graph.
      * @return <code>algorithm::GTL_OK</code> on success,
@@ -38,14 +38,14 @@ public:
      * @see algorithm#check
      */
     virtual int check (graph& G);
-	
+
     /**
-     * Reset. 
+     * Reset.
      *
      * @see algorithm#reset
      */
     virtual void reset () {};
-	
+
 	/**
 	 * Returns the value of the maximum weight bipartite matching for the graph G.
 	 *
@@ -53,43 +53,43 @@ public:
 	 *
 	 */
 	int get_mwbm() const { return mwbm; };
-	
+
 	/**
 	 * Returns the maximum weight bipartite matching for the graph G as a list of
 	 * edges.
 	 *
-	 * @return list of edges in maximum weight bipartite matching 
+	 * @return list of edges in maximum weight bipartite matching
 	 *
 	 */
 	edges_t get_match() { return result; };
-	
+
 protected:
     /**
      * @internal
      */
 	long mwbm;
-	
+
     /**
      * @internal
      */
     bool set_vars_executed;
-	
+
     /**
      * @internal
      */
     edge_map<int> edge_weight;
-    
+
 	edges_t result;
-    
+
 	node_map<long> pot;
 	node_map<bool> free;
 	node_map<long> dist;
 	node_map<long> pred;
 	std::map <int, node, std::less<int> > node_from_id;
 	std::map <int, edge, std::less<int> > edge_from_id;
-	
+
     fheap_t *pq;
-	
+
 	int augment(graph& G, node a);
 	inline void augment_path_to (graph &G, node v);
 
@@ -111,4 +111,3 @@ edges_t MAX_WEIGHT_BIPARTITE_MATCHING(graph &G, edge_map<int> weights);
 
 
 #endif
-
