@@ -15,6 +15,7 @@
 
 #include "tensorflow/cc/ops/const_op.h"
 #include "tensorflow/cc/ops/standard_ops.h"
+#include "tensorflow/cc/ops/image_ops.h"
 #include "tensorflow/core/framework/graph.pb.h"
 #include "tensorflow/core/graph/default_device.h"
 #include "tensorflow/core/graph/graph_def_builder.h"
@@ -33,10 +34,9 @@
 
 class Detector {
  public:
-    void initDetection(const std::string& model_file,const std::string& label_file);
-
-    std::vector<std::vector<float> > Detect(const cv::Mat& img);
-
+  Detector(){};
+  static  Detector *getDetector(const std::string& model_file,const std::string& label_file);
+  std::vector<std::vector<float> > Detect(const cv::Mat& img);
 
  private:
   static Detector * ssd_Detector;
