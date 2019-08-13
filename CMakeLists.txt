@@ -21,7 +21,7 @@ find_library(TENSORFLOW_CC_LIBRARY NAMES tensorflow_cc
 find_library(TENSORFLOW_FRAMEWORK_LIBRARY NAMES tensorflow_framework
              HINTS
              /usr/lib)
-set(TensorFlow_LIBS ${TENSORFLOW_CC_LIBRARY})       
+set(TensorFlow_LIBS ${TENSORFLOW_CC_LIBRARY} ${TENSORFLOW_FRAMEWORK_LIBRARY})       
 
 add_compile_definitions(${TensorFlow_CFLAGS_OTHER})
 
