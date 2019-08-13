@@ -15,8 +15,14 @@ FIND_PACKAGE(OpenCV REQUIRED)
 find_package(PkgConfig)
 pkg_check_modules(TensorFlow REQUIRED tensorflow)
 
-link_directories(${TensorFlow_LIBRARY_DIRS})
-include_directories(${TensorFlow_INCLUDE_DIRS})
+find_library(TENSORFLOW_CC_LIBRARY NAMES tensorflow_cc
+             HINTS
+             /usr/lib)
+find_library(TENSORFLOW_FRAMEWORK_LIBRARY NAMES tensorflow_framework
+             HINTS
+             /usr/lib)
+set(TensorFlow_LIBS ${TENSORFLOW_CC_LIBRARY})       
+
 add_compile_definitions(${TensorFlow_CFLAGS_OTHER})
 
 # ----------------------------------------------------------------------------
@@ -24,12 +30,10 @@ add_compile_definitions(${TensorFlow_CFLAGS_OTHER})
 # ----------------------------------------------------------------------------
 INCLUDE_DIRECTORIES(${OpenCV_INCLUDE_DIRS})
 include_directories(${TensorFlow_INCLUDE_DIRS})
-
+include_directories(${TensorFlow_INCLUDE_DIRS}/bazel-out/k8-opt/bin)
 INCLUDE(CheckIncludeFileCXX)
 
-INCLUDE_DIRECTORIES(
-        ${PROJECT_SOURCE_DIR}/include
-        )
+INCLUDE_DIRECTORIES(${PROJECT_SOURCE_DIR}/include)
 
 # ----------------------------------------------------------------------------
 # Add Definition and Options
@@ -164,4 +168,7 @@ SOURCE_GROUP("GTL" FILES ${gtl_source} ${gtl_header})
 # ----------------------------------------------------------------------------
 # Link libraries to project
 # ----------------------------------------------------------------------------
-TARGET_LINK_LIBRARIES(${PROJECT_NAME} ${OpenCV_LIBS} ${TensorFlow_LIBRARIES})
+TARGET_LINK_LIBRARIES(${PROJECT_NAME} 
+                        ${OpenCV_LIBS} 
+                        ${TensorFlow_LIBS}
+                        )

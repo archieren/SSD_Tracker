@@ -33,8 +33,7 @@
 
 class Detector {
  public:
-    void initDetection(const std::string& model_file,
-             const std::string& label_file);
+    void initDetection(const std::string& model_file,const std::string& label_file);
 
     std::vector<std::vector<float> > Detect(const cv::Mat& img);
 
