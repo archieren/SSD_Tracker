@@ -25,7 +25,6 @@
 #include "tensorflow/core/platform/init_main.h"
 #include "tensorflow/core/public/session.h"
 
-
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
 #include <opencv2/imgproc/imgproc.hpp>
@@ -33,15 +32,16 @@
 // This is a demo code for using a SSD model to do detection.
 
 class Detector {
- public:
-  Detector(){};
-  static  Detector *getDetector(const std::string& model_file,const std::string& label_file);
-  std::vector<std::vector<float> > Detect(const cv::Mat& img);
+  public:
+    Detector(const std::string& model_file,const std::string& label_file);
+    ~Detector(){};
+    std::vector<std::vector<float> > detect(const cv::Mat& img);
 
- private:
-  static Detector * ssd_Detector;
-  static std::unique_ptr<tensorflow::Session> sess;
-  static std::map<int,std::string> labelsMap ;
+  private:
+    std::unique_ptr<tensorflow::Session> sess;
+    std::map<int,std::string> labelsMap ;
+    const std::string inputLayer = "image_tensor:0";
+    const std::vector<std::string>  outputLayer = {"detection_boxes:0", "detection_scores:0", "detection_classes:0", "num_detections:0"};
 };
 
 #endif //PROJECT_SSD_DETECT_H

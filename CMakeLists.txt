@@ -153,9 +153,11 @@ set(tracker_source
 add_executable(${PROJECT_NAME}
         src/main.cpp
         src/ssd_detect.cpp
+        src/utils.cpp
         include/ssd_detect.h
         include/defines.h
         include/nms.h
+        include/utils.h
         ${tracker_source} ${tracker_headers} ${graph_source} ${graph_header} ${gtl_source} ${gtl_header}
 )
 
