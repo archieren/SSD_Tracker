@@ -31,7 +31,7 @@ public:
         m_colors.emplace_back(cv::Scalar(255, 0, 255));
         m_colors.emplace_back(cv::Scalar(255, 127, 255));
         m_colors.emplace_back(cv::Scalar(127, 0, 255));
-        m_colors.emplace_back(cv::Scalar(127, 0, 127));        
+        m_colors.emplace_back(cv::Scalar(127, 0, 127));
     }
 
     void process(std::string video_file,std::string out_file){
@@ -43,14 +43,14 @@ public:
             LOG(INFO) << "Video :" << video_file << " opened!";
         }
         auto frame_width = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_WIDTH));
-        auto frame_height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT)); 
+        auto frame_height = static_cast<int>(cap.get(cv::CAP_PROP_FRAME_HEIGHT));
 
         cv::Mat frame;
         int frameCount = 0;
 
         // video output
         cv::VideoWriter writer;
-        writer.open(out_file, cv::VideoWriter::fourcc('D', 'I', 'V', 'X'), m_fps, cv::Size(frame_width, frame_height), true);
+        writer.open(out_file, cv::VideoWriter::fourcc('X', '2', '6', '4'), m_fps, cv::Size(frame_width, frame_height), true);
 
         double fontScale = CalculateRelativeSize(frame_width, frame_height);
 
@@ -63,11 +63,11 @@ public:
             DrawData(frame, frameCount, fontScale);
             writer << frame;
             ++frameCount;
-        }       
+        }
     }
 
 protected:
-    void DrawTrack(cv::Mat frame,int resizeCoeff,const CTrack& track,bool drawTrajectory = true,bool isStatic = false){
+    void DrawTrack(cv::Mat frame,int resizeCoeff,const CTrack& track,bool drawTrajectory = true){
         auto ResizeRect = [&](const cv::Rect& r) -> cv::Rect
         {
             return cv::Rect(resizeCoeff * r.x, resizeCoeff * r.y, resizeCoeff * r.width, resizeCoeff * r.height);
@@ -77,14 +77,9 @@ protected:
             return cv::Point(resizeCoeff * pt.x, resizeCoeff * pt.y);
         };
 
-        if (track.m_lastRegion.m_type == "pedestrian")
-        {
-            cv::rectangle(frame, ResizeRect(track.GetLastRect()), cv::Scalar(198, 172, 75));
-        }
-        else
-        {
-            cv::rectangle(frame, ResizeRect(track.GetLastRect()), cv::Scalar(119, 102, 39));
-        }
+
+        cv::rectangle(frame, ResizeRect(track.GetLastRect()), cv::Scalar(198, 172, 75));
+
 
         if (drawTrajectory)
         {
@@ -94,15 +89,7 @@ protected:
             {
                 const TrajectoryPoint& pt1 = track.m_trace.at(j);
                 const TrajectoryPoint& pt2 = track.m_trace.at(j + 1);
-
-                if (track.m_lastRegion.m_type == "pedestrian")
-                {
-                    cv::line(frame, ResizePoint(pt1.m_prediction), ResizePoint(pt2.m_prediction), cv::Scalar(198, 172, 75));
-                }
-                else
-                {
-                    cv::line(frame, ResizePoint(pt1.m_prediction), ResizePoint(pt2.m_prediction), cv::Scalar(119, 102, 39));
-                }
+                cv::line(frame, ResizePoint(pt1.m_prediction), ResizePoint(pt2.m_prediction), cl, 4, cv::LINE_AA);
             }
         }
     }
@@ -120,8 +107,8 @@ protected:
                 int baseLine = 0;
                 cv::Size labelSize = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
                 auto rect(track->GetLastRect());
-                cv::rectangle(frame,    
-                              cv::Rect(cv::Point(rect.x, rect.y - labelSize.height), cv::Size(labelSize.width, labelSize.height + baseLine)), 
+                cv::rectangle(frame,
+                              cv::Rect(cv::Point(rect.x, rect.y - labelSize.height), cv::Size(labelSize.width, labelSize.height + baseLine)),
                               cv::Scalar(255, 255, 255));
                 cv::putText(frame, label, cv::Point(rect.x, rect.y), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0),1);
             }
@@ -168,8 +155,8 @@ int main(int argc, char** argv)
     std::string label_file="../models/label_map.pbtxt";
     PipeLine  pipeLine(model_file,label_file);
 
-    //std::string video_file="../data/video/pedestrian.mp4"; 
-    std::string video_file="../data/video/TownCentreXVID.avi";
+    std::string video_file="../data/video/pedestrian.mp4";
+    //std::string video_file="../data/video/TownCentreXVID.avi";
     std::string outFile = "../data/video/out.mp4";
     pipeLine.process(video_file,outFile);
     // TODO: put these variables in main
