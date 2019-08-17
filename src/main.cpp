@@ -76,15 +76,12 @@ protected:
         {
             return cv::Point(resizeCoeff * pt.x, resizeCoeff * pt.y);
         };
+        cv::Scalar cl = m_colors[track.m_trackID % m_colors.size()];
 
-
-        cv::rectangle(frame, ResizeRect(track.GetLastRect()), cv::Scalar(198, 172, 75));
-
+        cv::rectangle(frame, ResizeRect(track.GetLastRect()), cl, 2, cv::LINE_AA);
 
         if (drawTrajectory)
         {
-            cv::Scalar cl = m_colors[track.m_trackID % m_colors.size()];
-
             for (size_t j = 0; j < track.m_trace.size() - 1; ++j)
             {
                 const TrajectoryPoint& pt1 = track.m_trace.at(j);
