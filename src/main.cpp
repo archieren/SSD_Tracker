@@ -50,9 +50,8 @@ public:
 
         // video output
         cv::VideoWriter writer;
-        writer.open(out_file, cv::VideoWriter::fourcc('X', '2', '6', '4'), m_fps, cv::Size(frame_width, frame_height), true);
+        writer.open(out_file, cv::VideoWriter::fourcc('a', 'v', 'c', '1'), m_fps, cv::Size(frame_width, frame_height), true);
 
-        double fontScale = CalculateRelativeSize(frame_width, frame_height);
 
         while (true) {
             if (! cap.read(frame)) break;
@@ -60,7 +59,7 @@ public:
             cv::UMat clFrame;
             clFrame = frame.getUMat(cv::ACCESS_READ);
             m_tracker->Update(detections, clFrame, m_fps);
-            DrawData(frame, frameCount, fontScale);
+            DrawData(frame);
             writer << frame;
             ++frameCount;
         }
@@ -91,7 +90,7 @@ protected:
         }
     }
 
-    void DrawData(cv::Mat frame, int framesCounter, double fontScale){
+    void DrawData(cv::Mat frame){
         for (const auto& track : m_tracker->tracks)
         {
             if (track->IsRobust(5,                           // Minimal trajectory size
@@ -100,14 +99,15 @@ protected:
                     )
             {
                 DrawTrack(frame, 1, *track);
-                std::string label = track->m_lastRegion.m_type + ": " + std::to_string((int)(track->m_lastRegion.m_confidence * 100)) + " %";
+                //+ track->m_lastRegion.m_type
+                std::string label = std::to_string(track->m_trackID)  + ": " + std::to_string((int)(track->m_lastRegion.m_confidence * 100)) + " %";
                 int baseLine = 0;
-                cv::Size labelSize = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 1, &baseLine);
+                cv::Size labelSize = cv::getTextSize(label, cv::FONT_HERSHEY_SIMPLEX, 0.5, 2, &baseLine);
                 auto rect(track->GetLastRect());
                 cv::rectangle(frame,
-                              cv::Rect(cv::Point(rect.x, rect.y - labelSize.height), cv::Size(labelSize.width, labelSize.height + baseLine)),
+                              cv::Rect(cv::Point(rect.x, rect.y - labelSize.height - baseLine), cv::Size(labelSize.width, labelSize.height + baseLine)),
                               cv::Scalar(255, 255, 255));
-                cv::putText(frame, label, cv::Point(rect.x, rect.y), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0),1);
+                cv::putText(frame, label, cv::Point(rect.x, rect.y - baseLine), cv::FONT_HERSHEY_SIMPLEX, 0.5, cv::Scalar(0, 0, 0),2);
             }
         }
 
@@ -152,8 +152,8 @@ int main(int argc, char** argv)
     std::string label_file="../models/label_map.pbtxt";
     PipeLine  pipeLine(model_file,label_file);
 
-    std::string video_file="../data/video/pedestrian.mp4";
-    //std::string video_file="../data/video/TownCentreXVID.avi";
+    //std::string video_file="../data/video/pedestrian.mp4";
+    std::string video_file="../data/video/TownCentreXVID.avi";
     std::string outFile = "../data/video/out.mp4";
     pipeLine.process(video_file,outFile);
     // TODO: put these variables in main
