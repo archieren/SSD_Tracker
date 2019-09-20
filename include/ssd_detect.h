@@ -42,9 +42,9 @@ class Detector {
     std::unique_ptr<tensorflow::Session> sess;
     std::map<int,std::string> labelsMap ;
     std::string filter = "pedestrian";
-    float thresholdScore=0.95f;
-    float thresholdIOU=0.5f;
-    float memmoryUsage=0.1f;
+    float thresholdScore=0.8f;
+    float thresholdIOU=0.4f;
+    float memmoryUsage=0.2f;
     const std::string inputLayer = "image_tensor:0";
     const std::vector<std::string>  outputLayer = {"detection_boxes:0", "detection_scores:0", "detection_classes:0", "num_detections:0"};
 };

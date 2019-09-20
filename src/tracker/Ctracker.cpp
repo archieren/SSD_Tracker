@@ -222,7 +222,8 @@ void CTracker::UpdateHungrian(
         {
             tracks[i]->m_skippedFrames = 0;
             tracks[i]->Update(
-                        regions[assignment[i]], true,
+                    regions[assignment[i]],
+                    true,
                     m_settings.m_maxTraceLength,
                     m_prevFrame, grayFrame,
                     m_settings.m_useAbandonedDetection ? cvRound(m_settings.m_minStaticTime * fps) : 0);

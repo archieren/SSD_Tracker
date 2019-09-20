@@ -9,16 +9,17 @@ public:
         m_detector = std::make_unique<Detector>(model_file,label_file);
 
         TrackerSettings settings;
+        settings.m_useLocalTracking = false;
         settings.m_distType = tracking::DistRects;
         settings.m_kalmanType = tracking::KalmanLinear;
         settings.m_filterGoal = tracking::FilterRect;
         settings.m_lostTrackType = tracking::TrackKCF;       // Use KCF tracker for collisions resolving
-        settings.m_matchType = tracking::MatchHungrian;
+        settings.m_matchType = tracking::MatchBipart;        // tracking::MatchHungrian;
         settings.m_dt = 0.3f;                                // Delta time for Kalman filter
         settings.m_accelNoiseMag = 0.1f;                     // Accel noise magnitude for Kalman filter
         settings.m_distThres = 100;                          // Distance threshold between region and object on two frames
         settings.m_maximumAllowedSkippedFrames = (size_t)(1 * m_fps);  // Maximum allowed skipped frames
-        settings.m_maxTraceLength = (size_t)(5 * m_fps);
+        settings.m_maxTraceLength = (size_t)(10 * m_fps);
 
         m_tracker = std::make_unique<CTracker>(settings);
 
@@ -113,22 +114,11 @@ protected:
 
     }
 
-    double CalculateRelativeSize(int frame_width, int frame_height){
-        int baseLine = 0;
-        double countBoxWidth = frame_width * 0.1;
-        double countBoxHeight = frame_height * 0.1;
-        cv::Rect countBoxRec(0, 200, int(countBoxWidth), int(countBoxHeight));
-        std::string counterLabel_Left = "Count : " + std::to_string(0);
-        cv::Size rect = cv::getTextSize(counterLabel_Left, cv::FONT_HERSHEY_PLAIN, 1.0, 1, &baseLine);
-        double scalex = (double)countBoxRec.width / (double)rect.width;
-        double scaley = (double)countBoxRec.height / (double)rect.height;
-        return std::min(scalex, scaley);
-    }
 private:
     std::vector<cv::Scalar> m_colors;
     std::unique_ptr<Detector> m_detector;
     std::unique_ptr<CTracker> m_tracker;
-    float m_fps=30;
+    float m_fps = 30;
 };
 
 // ----------------------------------------------------------------------
@@ -152,6 +142,8 @@ int main(int argc, char** argv)
     std::string label_file="../models/label_map.pbtxt";
     PipeLine  pipeLine(model_file,label_file);
 
+    //std::string video_file="../data/video/(0).mp4";
+    //std::string video_file="../data/video/pedestrian.mp4";
     //std::string video_file="../data/video/pedestrian.mp4";
     std::string video_file="../data/video/TownCentreXVID.avi";
     std::string outFile = "../data/video/out.mp4";
