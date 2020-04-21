@@ -3,6 +3,8 @@ models/
 work/
 data/
 TAGS
+#
+compile_commands.json
 # ccls
 .ccls-cache/
 # clangd
