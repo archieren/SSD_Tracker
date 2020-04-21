@@ -3,9 +3,13 @@ models/
 work/
 data/
 TAGS
+# ccls
+.ccls-cache/
+# clangd
+.clangd/
 # VScode
 .vscode/
-# CMake 
+# CMake
 build/
 
 # Byte-compiled / optimized / DLL files

@@ -6,6 +6,7 @@ cmake_minimum_required(VERSION 3.5)
 #set (PROJECT_NAME  SSD)
 project(SSD)
 
+set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # ----------------------------------------------------------------------------
 # Find Libraries
 # ----------------------------------------------------------------------------
