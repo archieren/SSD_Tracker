@@ -160,7 +160,7 @@ add_executable(${PROJECT_NAME}
         include/nms.h
         include/utils.h
         ${tracker_source} ${tracker_headers} ${graph_source} ${graph_header} ${gtl_source} ${gtl_header}
-)
+	)
 
 SOURCE_GROUP("Source Files" FILES ${tracker_source})
 SOURCE_GROUP("Header Files" FILES ${tracker_headers})
